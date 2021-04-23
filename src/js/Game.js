@@ -1,64 +1,43 @@
-class Game {
+import GameBoard from './GameBoard';
+import Modal from './Modal';
+
+export default class Game {
   constructor(container, boardSize) {
-    this.container = container;
-    this.boardSize = boardSize;
+    this.board = new GameBoard(container, boardSize);
     this.currentPosition = null;
   }
 
   init() {
-    this.generateGameField();
+    this.board.drawUI();
+    this.board.addCellClickListener(this.onClickMouse.bind(this));
     this.start();
   }
 
-  generateGameField() {
-    const gameContainer = this.createElement('div', '', 'game-container');
-
-    const gameTitle = this.createElement('h1', 'Hit the Demon', 'game-title');
-
-    for (let i = 0; i < this.boardSize ** 2; i += 1) {
-      const cellElement = this.createElement('div', '', 'cell');
-      gameContainer.appendChild(cellElement);
+  onClickMouse(index) {
+    if (this.currentPosition !== index) {
+      this.board.miss();
+      return;
     }
-    this.cells = [...gameContainer.children];
-    this.container.appendChild(gameTitle);
-    this.container.appendChild(gameContainer);
-  }
-
-  createElement(type, message, ...className) {
-    const element = document.createElement(type);
-    element.className = className.join(' ');
-    element.textContent = message;
-    return element;
+    this.board.changeCursor();
+    this.board.removeNPC(index);
+    this.board.successfulHit();
   }
 
   generateRandomPosition() {
-    const positionIndex = Math.floor(Math.random() * this.cells.length);
+    const positionIndex = Math.floor(Math.random() * this.board.cells.length);
     if (positionIndex === this.currentPosition) {
       this.generateRandomPosition();
       return;
     }
-    this.removeNPC();
+    this.board.removeNPC(this.currentPosition);
     this.currentPosition = positionIndex;
-    this.showNPC(positionIndex);
-  }
-
-  showNPC(index) {
-    const npcElement = this.createElement('div', '', 'cell-npc');
-    this.cells[index].appendChild(npcElement);
-  }
-
-  removeNPC() {
-    if (this.currentPosition === null) {
-      return;
-    }
-    this.cells[this.currentPosition].firstChild.remove();
+    this.board.showNPC(positionIndex);
+    this.board.setCursor();
   }
 
   start() {
     setInterval(() => {
       this.generateRandomPosition();
-    }, 2000);
+    }, 1000);
   }
 }
-
-export default Game;

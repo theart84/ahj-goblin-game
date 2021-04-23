@@ -9,7 +9,7 @@ test('Метод start вызывает setInterval', () => {
 });
 
 test('Метод generateGameField создает контейнер с нужными элементами', () => {
-  app.generateGameField();
+  app.drawUI();
 
   expect(app.container.children[0].tagName).toBe('H1');
 });
@@ -18,10 +18,10 @@ test('Метод createElement должен создавать html элемен
 });
 
 test('Метод init() вызывает методы generateGameField и start', () => {
-  app.generateGameField = jest.fn();
+  app.drawUI = jest.fn();
   app.start = jest.fn();
   app.init();
-  expect(app.generateGameField).toBeCalled();
+  expect(app.drawUI).toBeCalled();
   expect(app.start).toBeCalled();
 });
 
