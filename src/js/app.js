@@ -4,4 +4,8 @@ const root = document.getElementById('root');
 
 const app = new Game(root, 4);
 
-app.init();
+try {
+  app.init();
+} catch (e) {
+  console.log(app.message);
+}

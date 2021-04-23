@@ -9,6 +9,8 @@
   "rules": {
     "prettier/prettier": ["error"],
     "class-methods-use-this": "off",
+    "no-plusplus": "off",
+    "no-underscore-dangle": "off",
     "no-restricted-syntax": [
       "error",
       "LabeledStatement",
