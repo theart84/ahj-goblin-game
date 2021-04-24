@@ -74,10 +74,9 @@ export default class GameBoard {
 
   changeCursor() {
     this.removeCursor();
-    let timerID = setTimeout(() => {
+    this.timerID = setTimeout(() => {
       this.setCursor();
-      // eslint-disable-next-line no-unused-vars
-      timerID = null;
+      this.timerID = null;
     }, 300);
   }
 

@@ -6,7 +6,7 @@ export default class Modal {
   showModal(message) {
     const template = `
       <div class='modal-container'>
-        <div class='modal-backgorund'></div>
+        <div class='modal-background'></div>
         <div class='modal-body'>
           <h2 class='modal-text'>${message}</h2>
           <button class='modal-button'>Ok</button>

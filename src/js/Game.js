@@ -5,15 +5,14 @@ import Modal from './Modal';
 export default class Game {
   constructor(container, boardSize) {
     if (!(container instanceof HTMLElement)) {
-      return new Error('Передайте HTML элемент!');
+      throw new Error('Передайте HTML элемент!');
     }
     if (!Number.isInteger(boardSize)) {
-      return new Error('Необходимо передать число!');
+      throw new Error('Необходимо передать число!');
     }
     this.board = new GameBoard(container, boardSize);
     this.modal = new Modal(container);
     this.npc = new Character('goblin', 4);
-    this.currentPosition = null;
     this.successfulHit = null;
     this.missHit = null;
   }

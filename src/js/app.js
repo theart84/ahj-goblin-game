@@ -7,5 +7,5 @@ const app = new Game(root, 4);
 try {
   app.init();
 } catch (e) {
-  console.log(app.message);
+  console.log(e.message);
 }

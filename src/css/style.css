@@ -38,7 +38,7 @@ h2 {
   cursor: url("../img/hammer-click.png"), auto;
 }
 
-.modal-container {
+.modal-background {
   position: fixed;
   top: 0;
   left: 0;
