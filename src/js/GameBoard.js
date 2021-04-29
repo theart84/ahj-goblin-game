@@ -84,9 +84,8 @@ export default class GameBoard {
 
   changeCursor() {
     this.removeCursor();
-    this.timerID = setTimeout(() => {
+    setTimeout(() => {
       this.setCursor();
-      this.timerID = null;
     }, 300);
   }
 
