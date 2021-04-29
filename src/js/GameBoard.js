@@ -1,11 +1,9 @@
-import Modal from './Modal';
-
 export default class GameBoard {
   constructor(container, boardSize) {
     this.container = container;
     this.boardSize = boardSize;
-    this.modal = new Modal(container);
     this.cellClickListener = [];
+    this.buttonClickListener = [];
   }
 
   drawUI() {
@@ -15,6 +13,8 @@ export default class GameBoard {
     this.successfulPointsElement = this.createElement('span', '0', 'game-score-points-success');
     const missHit = this.createElement('h2', 'Miss hit: ', 'game-score-miss');
     this.missPointsElement = this.createElement('span', '0', 'game-score-points-miss');
+    const newGameButton = this.createElement('button', 'New Game', 'game-button-new-game');
+    newGameButton.addEventListener('click', (event) => this.onButtonClick(event));
 
     for (let i = 0; i < this.boardSize ** 2; i++) {
       const cellElement = this.createElement('div', '', 'cell');
@@ -28,6 +28,7 @@ export default class GameBoard {
     this.container.appendChild(successfulHit);
     this.container.appendChild(missHit);
     missHit.appendChild(this.missPointsElement);
+    this.container.appendChild(newGameButton);
     this.container.appendChild(gameContainer);
   }
 
@@ -40,6 +41,15 @@ export default class GameBoard {
 
   addCellClickListener(callback) {
     this.cellClickListener.push(callback);
+  }
+
+  addButtonClickListener(callback) {
+    this.buttonClickListener.push(callback);
+  }
+
+  onButtonClick(event) {
+    event.preventDefault();
+    this.buttonClickListener.forEach((cb) => cb());
   }
 
   onCellClick(event) {

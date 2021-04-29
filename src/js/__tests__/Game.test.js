@@ -23,7 +23,7 @@ test('Метод init() вызывает методы generateGameField и start
 
 test('Метод onClickMouse вызывает нужные методы', () => {
   const app = new Game(document.createElement('div'), 4);
-  app.npc.position = 0;
+  app.npc.currentPosition = 0;
   app.board.changeCursor = jest.fn();
   app.board.removeNPC = jest.fn();
   app.board.successfulHit = jest.fn();
@@ -46,7 +46,7 @@ test('Метод onClickMouse вызовет модальное окно и ме
 
 test('Метод onClickMouse вызовет модальное окно и метод для обнуления очков, если неудачных ударов будет 5', () => {
   const app = new Game(document.createElement('div'), 4);
-  app.npc.position = 4;
+  app.npc.currentPosition = 4;
   app.missHit = 4;
   app.modal.showModal = jest.fn();
   app.board.resetScore = jest.fn();
@@ -58,7 +58,7 @@ test('Метод onClickMouse вызовет модальное окно и ме
 
 test('Метод onClickMouse вызовет метод miss, если в ячейке нет персонажа', () => {
   const app = new Game(document.createElement('div'), 4);
-  app.npc.position = 4;
+  app.npc.currentPosition = 4;
   app.board.miss = jest.fn();
   app.onClickMouse(0);
   expect(app.board.miss).toBeCalled();
@@ -74,4 +74,19 @@ test('Метод generateRandomPosition генериует позицию и в�
   expect(app.board.removeNPC).toBeCalled();
   expect(app.board.renderNPC).toBeCalled();
   expect(app.board.setCursor).toBeCalled();
+});
+
+test('Метод newGame очищает timerId и вызывает метод start', () => {
+  const app = new Game(document.createElement('div'), 4);
+  app.start = jest.fn();
+  app.timerId = 5;
+  app.newGame();
+  expect(app.start).toBeCalled();
+  expect(app.timerId).toBe(null);
+});
+
+test('Метод start запускает таймер', () => {
+  const app = new Game(document.createElement('div'), 4);
+  app.start();
+  expect(app.timerId).not.toBe(null);
 });

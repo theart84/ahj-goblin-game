@@ -1,14 +1,11 @@
 export default class Character {
   constructor(name, boarSize) {
     this.name = name;
-    this._position = Math.floor(Math.random() * boarSize ** 2);
+    this.boarSize = boarSize;
+    this.currentPosition = Math.floor(Math.random() * boarSize ** 2);
   }
 
   get position() {
-    return this._position;
-  }
-
-  set position(value) {
-    this._position = value;
+    return Math.floor(Math.random() * this.boarSize ** 2);
   }
 }

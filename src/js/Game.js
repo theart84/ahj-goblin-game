@@ -12,15 +12,17 @@ export default class Game {
     }
     this.board = new GameBoard(container, boardSize);
     this.modal = new Modal(container);
-    this.npc = new Character('goblin', 4);
+    this.npc = new Character('goblin', boardSize);
     this.successfulHit = null;
     this.missHit = null;
+    this.timerId = null;
   }
 
   init() {
     this.board.drawUI();
     this.board.addCellClickListener(this.onClickMouse.bind(this));
-    this.board.renderNPC(this.npc.position);
+    this.board.addButtonClickListener(this.newGame.bind(this));
+    this.board.renderNPC(this.npc.currentPosition);
     this.start();
   }
 
@@ -28,14 +30,18 @@ export default class Game {
     if (++this.successfulHit === 10) {
       this.modal.showModal('Поздравляем, Вы победили!');
       this.successfulHit = 0;
+      this.missHit = 0;
       this.board.resetScore();
+      clearInterval(this.timerId);
       return;
     }
-    if (this.npc.position !== index) {
+    if (this.npc.currentPosition !== index) {
       if (++this.missHit === 5) {
         this.modal.showModal('Печаль, беда, Вы проиграли ;-(');
+        this.successfulHit = 0;
         this.missHit = 0;
         this.board.resetScore();
+        clearInterval(this.timerId);
         return;
       }
       this.board.miss();
@@ -47,20 +53,27 @@ export default class Game {
   }
 
   generateRandomPosition() {
-    const positionIndex = Math.floor(Math.random() * this.board.cells.length);
-    if (positionIndex === this.npc.position) {
+    const newPosition = this.npc.position;
+    if (this.npc.currentPosition === newPosition) {
       this.generateRandomPosition();
       return;
     }
-    this.board.removeNPC(this.npc.position);
-    this.npc.position = positionIndex;
-    this.board.renderNPC(this.npc.position);
+
+    this.board.removeNPC(this.npc.currentPosition);
+    this.npc.currentPosition = newPosition;
+    this.board.renderNPC(this.npc.currentPosition);
     this.board.setCursor();
   }
 
   start() {
-    setInterval(() => {
+    this.timerId = setInterval(() => {
       this.generateRandomPosition();
     }, 1000);
+  }
+
+  newGame() {
+    clearInterval(this.timerId);
+    this.timerId = null;
+    this.start();
   }
 }

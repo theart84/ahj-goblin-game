@@ -66,6 +66,12 @@ test('Метод addCellClickListener пушит коллбек в массив'
   expect(board.cellClickListener.length).toBe(1);
 });
 
+test('Метод addCellClickListener пушит коллбек в массив', () => {
+  const board = new GameBoard(document.createElement('div'), 4);
+  board.addButtonClickListener(() => {});
+  expect(board.buttonClickListener.length).toBe(1);
+});
+
 test('Метод renderNPC добавляет персонажа', () => {
   const board = new GameBoard(document.createElement('div'), 4);
   board.createElement = jest.fn(() => document.createElement('div'));
@@ -83,4 +89,28 @@ test('Метод renderNPC добавляет персонажа', () => {
   expect(board.cells[1].firstElementChild).toBe(null);
   board.removeNPC(2);
   expect(board.cells[1].firstElementChild).toBe(null);
+});
+
+test('Метод onButtonClick запускает коллбеки', () => {
+  const board = new GameBoard(document.createElement('div'), 4);
+  const event = new Event('click');
+  let fn = () => {};
+  fn = jest.fn();
+  board.addButtonClickListener(fn);
+  board.onButtonClick(event);
+  expect(fn).toBeCalled();
+});
+
+test('Метод onCellClick запускает коллбеки', () => {
+  const board = new GameBoard(document.createElement('div'), 4);
+  board.cells = [document.createElement('div')];
+  const event = {
+    preventDefault() {},
+    currentTarget: 1,
+  };
+  let fn = () => {};
+  fn = jest.fn();
+  board.addCellClickListener(fn);
+  board.onCellClick(event, 1);
+  expect(fn).toBeCalled();
 });
